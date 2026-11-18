@@ -2,22 +2,22 @@
 
 ## Phase 1 — Django Fundamentals
 
-- [ ] Day 1 — Environment & Django Setup
-- [ ] Day 2 — Views & URL Routing
-- [ ] Day 3 — Dynamic URLs & Parameters
-- [ ] Day 4 — Templates & Rendering
-- [ ] Day 5 — Django Template Language (DTL)
-- [ ] Day 6 — Template Inheritance & Static Files
+- [x] Day 1 — Environment & Django Setup
+- [x] Day 2 — Views & URL Routing
+- [x] Day 3 — Dynamic URLs & Parameters
+- [x] Day 4 — Templates & Rendering
+- [x] Day 5 — Django Template Language (DTL)
+- [x] Day 6 — Template Inheritance & Static Files
 
 ## Phase 2 — Models & Database
 
-- [ ] Day 7 — Models & Database Fundamentals
-- [ ] Day 8 — Migrations & Django ORM
+- [x] Day 7 — Models & Database Fundamentals
+- [x] Day 8 — Migrations & Django ORM
 
 ## Phase 3 — CRUD Operations
 
-- [ ] Day 9 — CRUD: Create & Read
-- [ ] Day 10 — CRUD: Update, Delete & Admin
+- [x] Day 9 — CRUD: Create & Read
+- [x] Day 10 — CRUD: Update, Delete & Admin
 
 ## Phase 4 — Authentication
 
