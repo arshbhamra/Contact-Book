@@ -1,0 +1,20 @@
+{% extends 'contacts/base.html' %}
+
+{% block content %}
+<h1>this is CONTACTS PAGE</h1>
+
+{% if contacts %}
+<span>My Contacts</span>
+<br /><br />
+
+{% for contact in contacts %}
+<span>{{ contact }}, {{ contact.phone }}, {{ contact.city }}, {{ contact.email }} <br /></span>
+{% empty %}
+<p>no contacts</p>
+{% endfor %}
+
+{% else %}
+<p>no contacts</p>
+{% endif %}
+
+{% endblock %}
