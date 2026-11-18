@@ -21,7 +21,7 @@
 
 ## Phase 4 — Authentication
 
-- [ ] Day 11 — Authentication (Registration, Login & Logout)
+- [x] Day 11 — Authentication (Registration, Login & Logout)
 
 ## Phase 5 — Intermediate Django
 

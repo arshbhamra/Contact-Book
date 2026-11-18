@@ -1,8 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from .models import Contacts 
-from .forms import ContactForm
-
+from .forms import RegisterForm
 
 def home(request):
     return render(request, 'contacts/home.html')
@@ -43,6 +42,7 @@ def add_contact(request):
 
 def edit_contact(request, pk):
 
+
     contact = get_object_or_404(Contacts, pk=pk)
     
     if request.method == 'POST':
@@ -60,3 +60,23 @@ def edit_contact(request, pk):
         "contacts/edit_contact.html",
         {"form": form, "contact": contact}
     )
+
+def register(request):
+    
+    if request.method == "POST" :
+        
+        form = RegisterForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect("login")
+        
+    else:
+        form = RegisterForm()
+        
+    return render(
+        request,
+        "contacts/register.html",
+        {"form": form}
+    )
+        
