@@ -10,5 +10,7 @@ urlpatterns = [
     path('add-contact/', views.add_contact, name="add_contact"),
     path('edit-contact/<int:pk>/', views.edit_contact, name="edit_contact"),
     path('register/', views.register, name="register"),
+    path('login/', views.user_login, name="login"),
+    path('logout/', views.user_logout, name="logout"),
 
 ]

@@ -12,17 +12,31 @@
 
         <h1>My Contact Book</h1>
 
+        {% if user.is_authenticated %}
+
         <nav>
             <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'register' %}">Register</a>
             <a href="{% url 'contacts' %}"> Contacts</a>
             <a href="{% url 'about' %}">About</a>
             <a href="{% url 'add_contact' %}">Add Contact</a>
-
+            
         </nav>
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+        <button type="submit"> Logout </button>
+        </form>
     </header>
+
+
+      {% else %}
+        <a href=" {% url 'login' %}"> Login </a></br>
+        <a href="{% url 'register' %}">Register </a>
+    {% endif %}
 
     <main>{% block content %} {% endblock %}</main>
 
+  
     <footer>
         <p>My Contact Book - 2026</p>
     </footer>

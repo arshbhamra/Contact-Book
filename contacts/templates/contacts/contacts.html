@@ -8,7 +8,7 @@
 <br /><br />
 
 {% for contact in contacts %}
-<span>{{ contact }}, {{ contact.phone }}, {{ contact.city }}, {{ contact.email }} <br /></span>
+<span>{{ forloop.counter }}, {{ contact.name }}, {{ contact.phone }}, {{ contact.city }}, {{ contact.email }} <br /></span>
 {% empty %}
 <p>no contacts</p>
 {% endfor %}

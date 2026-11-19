@@ -1,7 +1,11 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from .models import Contacts 
-from .forms import RegisterForm
+from .forms import RegisterForm, LoginForm, ContactForm
+from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+
 
 def home(request):
     return render(request, 'contacts/home.html')
@@ -9,6 +13,7 @@ def home(request):
 def about(request):
     return render(request, 'contacts/about.html')
 
+@login_required
 def contacts(request):
    
    contacts = Contacts.objects.all()
@@ -80,3 +85,41 @@ def register(request):
         {"form": form}
     )
         
+def user_login(request):
+    
+    if request.method == 'POST':
+        
+        form = LoginForm(request, data=request.POST)
+
+        if form.is_valid():
+            
+            user = form.get_user()
+            login(request, user)
+            return redirect("/app/contacts/")
+        
+    else:
+        form = LoginForm()
+    
+    return render(
+        request,
+        'contacts/login.html',
+        {"form": form}
+    )
+
+@require_POST
+def user_logout(request):
+
+    logout(request)
+    
+    return redirect("login")
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
