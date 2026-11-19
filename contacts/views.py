@@ -21,12 +21,13 @@ def contacts(request):
    
    return render( request, 'contacts/contacts.html', {'contacts':contacts})
 
+
+
 def greet(request, name, age):
     data = {
         'username' : name,
         'userage' : age
     }
-    
     
     Contacts.objects.create(
            user=request.user,
@@ -36,10 +37,8 @@ def greet(request, name, age):
            email="awddafc@ww.com"
        )
     
-         
-       
-    
     return render(request, 'contacts/greeting.html', data)
+
 
 @login_required
 def add_contact(request):
@@ -49,7 +48,10 @@ def add_contact(request):
 
 
        if form.is_valid():
-          form.save()
+           
+          contact = form.save(commit=False)
+          contact.user = request.user
+          contact.save()
           return redirect("/app/contacts/") 
 
     else:
@@ -60,6 +62,7 @@ def add_contact(request):
                   "contacts/add_contact.html",
                   {"form": form}
                 )         
+
 
 @login_required
 def edit_contact(request, pk):
@@ -80,12 +83,26 @@ def edit_contact(request, pk):
     return render(
         request,
         "contacts/edit_contact.html",
-        {"form": form, "contact": contact}
+        {
+         "form": form, 
+         "contact": contact
+        }
     )
+    
+    
+@require_POST
+@login_required
+def delete_contact(request, pk):
+    
+    contact = get_object_or_404(Contacts, pk=pk, user=request.user)
+    contact.delete()
+    return redirect("/app/contacts/")
+
+
 
 def register(request):
     
-    if request.method == "POST" :
+    if request.method == "POST":
         
         form = RegisterForm(request.POST)
 
@@ -101,6 +118,7 @@ def register(request):
         "contacts/register.html",
         {"form": form}
     )
+    
         
 def user_login(request):
     
@@ -122,6 +140,7 @@ def user_login(request):
         'contacts/login.html',
         {"form": form}
     )
+    
 
 @require_POST
 def user_logout(request):

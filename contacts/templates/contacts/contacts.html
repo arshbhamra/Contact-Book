@@ -8,7 +8,12 @@
 <br /><br />
 
 {% for contact in contacts %}
-<span>{{ forloop.counter }}, {{ contact.name }}, {{ contact.phone }}, {{ contact.city }}, {{ contact.email }} <br /></span>
+<form method="post" action="{% url 'delete_contact' contact.id %}">
+    {% csrf_token %}
+    <button type="submit">Delete </button>
+
+{{ forloop.counter }}, {{ contact.name }}, {{ contact.phone }}, {{ contact.city }}, {{ contact.email }}
+</form>    
 {% empty %}
 <p>no contacts</p>
 {% endfor %}
