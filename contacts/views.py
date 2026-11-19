@@ -16,7 +16,8 @@ def about(request):
 @login_required
 def contacts(request):
    
-   contacts = Contacts.objects.all()
+#    contacts = Contacts.objects.all()
+   contacts = Contacts.objects.filter(user=request.user)
    
    return render( request, 'contacts/contacts.html', {'contacts':contacts})
 
@@ -25,12 +26,27 @@ def greet(request, name, age):
         'username' : name,
         'userage' : age
     }
+    
+    
+    Contacts.objects.create(
+           user=request.user,
+           name="hei",
+           city="kaad",
+           phone="4567323",
+           email="awddafc@ww.com"
+       )
+    
+         
+       
+    
     return render(request, 'contacts/greeting.html', data)
 
+@login_required
 def add_contact(request):
     
     if request.method == 'POST':
        form = ContactForm(request.POST) 
+
 
        if form.is_valid():
           form.save()
@@ -45,10 +61,11 @@ def add_contact(request):
                   {"form": form}
                 )         
 
+@login_required
 def edit_contact(request, pk):
 
 
-    contact = get_object_or_404(Contacts, pk=pk)
+    contact = get_object_or_404(Contacts, pk=pk,user=request.user)
     
     if request.method == 'POST':
         form = ContactForm(request.POST, instance=contact)

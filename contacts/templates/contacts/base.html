@@ -22,8 +22,10 @@
             <a href="{% url 'add_contact' %}">Add Contact</a>
             
         </nav>
-        <form method="POST" action="{% url 'logout' %}">
+         <form method="POST" action="{% url 'logout' %}">
             {% csrf_token %}
+       {{ request.user }}
+
         <button type="submit"> Logout </button>
         </form>
     </header>
