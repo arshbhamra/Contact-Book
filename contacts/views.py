@@ -5,6 +5,8 @@ from .forms import RegisterForm, LoginForm, ContactForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from django.contrib import messages
+from django.contrib.auth.models import User
 
 
 def home(request):
@@ -20,7 +22,6 @@ def contacts(request):
    contacts = Contacts.objects.filter(user=request.user)
    
    return render( request, 'contacts/contacts.html', {'contacts':contacts})
-
 
 
 def greet(request, name, age):
@@ -52,10 +53,12 @@ def add_contact(request):
           contact = form.save(commit=False)
           contact.user = request.user
           contact.save()
+          messages.success(request, "Contact saved successfully")
           return redirect("/app/contacts/") 
 
     else:
           form = ContactForm()
+          messages.error(request, "Contact not Saved !!")
           
     return render(
                   request, 
@@ -75,10 +78,12 @@ def edit_contact(request, pk):
 
         if form.is_valid():
             form.save()
+            messages.success(request, "Contact update successfully !")
             return redirect("/app/contacts/")
         
     else:
         form = ContactForm(instance=contact)
+        messages.error(request, "Contact couldnt not update.")
     
     return render(
         request,
@@ -94,10 +99,16 @@ def edit_contact(request, pk):
 @login_required
 def delete_contact(request, pk):
     
-    contact = get_object_or_404(Contacts, pk=pk, user=request.user)
-    contact.delete()
-    return redirect("/app/contacts/")
+    if User.objects.get(pk=pk):
+    
+        contact = get_object_or_404(Contacts, pk=pk, user=request.user)
+        contact.delete()
+        messages.success(request, "Contact deleted Success !!!")
+    
+    else:
+        messages.error(request, "Failed to delete !!")
 
+    return redirect("/app/contacts/")
 
 
 def register(request):
@@ -108,10 +119,13 @@ def register(request):
 
         if form.is_valid():
             form.save()
+            messages.success(request, "Registration Success !!!")
+            
             return redirect("login")
         
     else:
         form = RegisterForm()
+        messages.error(request, "Registration Failed !!!")
         
     return render(
         request,
@@ -130,10 +144,12 @@ def user_login(request):
             
             user = form.get_user()
             login(request, user)
+            messages.success(request, "Login Success !!!")
             return redirect("/app/contacts/")
         
     else:
         form = LoginForm()
+        messages.error(request, "Login Failed !!!")
     
     return render(
         request,
@@ -146,6 +162,7 @@ def user_login(request):
 def user_logout(request):
 
     logout(request)
+    messages.success(request, "Logout Successfull !")
     
     return redirect("login")
 
