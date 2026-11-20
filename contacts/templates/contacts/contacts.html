@@ -3,23 +3,59 @@
 {% block content %}
 <h1>this is CONTACTS PAGE</h1>
 
-{% if contacts %}
-<span>My Contacts</span>
-<br /><br />
+<span>My Contacts</span><br /><br>
 
-{% for contact in contacts %}
+{% for contact in page_obj %}
+
 <form method="post" action="{% url 'delete_contact' contact.id %}">
     {% csrf_token %}
     <button type="submit">Delete </button>
 
-{{ forloop.counter }}, {{ contact.name }}, {{ contact.phone }}, {{ contact.city }}, {{ contact.email }}
-</form>    
-{% empty %}
-<p>no contacts</p>
-{% endfor %}
+    {{ forloop.counter }}, {{ contact.id}}, {{ contact.name }}, {{ contact.phone }}, {{ contact.city }}, {{ contact.email }} <br />
 
-{% else %}
+</form>
+{% empty %}
+
 <p>no contacts</p>
-{% endif %}
+
+{% endfor %}
+<br><br>
+<div class="pagination">
+    {% if page_obj.has_previous %}
+
+    <a href="?page=1">First</a>
+    <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+
+    {% endif %}
+
+    <span>
+        Page {{ page_obj.number }}
+        of {{ page_obj.paginator.num_pages}}
+    </span>
+
+    {% if page_obj.has_next %}
+
+    <a href="?page={{ page_obj.next_page_number}}">Next</a>
+    <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+
+    {% endif %}
+</div>
+
+<br><br>
+<div class="page2">
+    {% for num in page_obj.paginator.page_range %}
+
+    {% if page_obj.number == num %}
+
+    <strong>{{ num }}</strong>
+
+    {% else %}
+
+    <a href="?page={{ num }}">{{ num }}</a>
+
+    {% endif %}
+
+    {% endfor %}
+</div>
 
 {% endblock %}

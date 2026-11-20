@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 
 
 def home(request):
@@ -19,9 +20,19 @@ def about(request):
 def contacts(request):
    
 #    contacts = Contacts.objects.all()
-   contacts = Contacts.objects.filter(user=request.user)
+   contacts_list = Contacts.objects.filter(user=request.user).order_by("id")
    
-   return render( request, 'contacts/contacts.html', {'contacts':contacts})
+   paginator = Paginator(contacts_list,4)
+   
+   page_num = request.GET.get("page")
+
+   page_obj = paginator.get_page(page_num)
+   
+   return render( 
+            request, 
+            'contacts/contacts.html',
+            {"page_obj": page_obj}
+        )
 
 
 def greet(request, name, age):
