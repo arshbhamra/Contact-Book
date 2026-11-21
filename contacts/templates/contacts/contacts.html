@@ -3,6 +3,13 @@
 {% block content %}
 <h1>this is CONTACTS PAGE</h1>
 
+<form method="GET">
+    <input type="text" name="q" placeholder="Search anything" value="{{ query }}"> or &nbsp;
+    <input type="text" name="city" placeholder="Search City" value="{{ city }}"> <br>
+    <button type="submit">Search</button>
+    <a href="{% url 'contacts' %}"> Clear</a>
+</form>
+
 <span>My Contacts</span><br /><br>
 
 {% for contact in page_obj %}
@@ -11,7 +18,7 @@
     {% csrf_token %}
     <button type="submit">Delete </button>
 
-    {{ forloop.counter }}, {{ contact.id}}, {{ contact.name }}, {{ contact.phone }}, {{ contact.city }}, {{ contact.email }} <br />
+    {{ page_obj.start_index|add:forloop.counter0 }}. &nbsp; {{ contact.id}}, {{ contact.name }}, {{ contact.phone }}, {{ contact.city }}, {{ contact.email }} <br />
 
 </form>
 {% empty %}
@@ -23,8 +30,8 @@
 <div class="pagination">
     {% if page_obj.has_previous %}
 
-    <a href="?page=1">First</a>
-    <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    <a href="?q={{ query|urlencode }}&page=1">First</a>
+    <a href="?q={{ query|urlencode }}&page={{ page_obj.previous_page_number }}">Previous</a>
 
     {% endif %}
 
@@ -34,9 +41,8 @@
     </span>
 
     {% if page_obj.has_next %}
-
-    <a href="?page={{ page_obj.next_page_number}}">Next</a>
-    <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+    <a href="?q={{ query|urlencode }}&page={{ page_obj.next_page_number }}"> Next</a>
+    <a href="?q={{ query|urlencode }}&page={{ page_obj.paginator.num_pages }}">Last</a>
 
     {% endif %}
 </div>

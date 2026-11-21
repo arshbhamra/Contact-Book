@@ -20,5 +20,12 @@ class Contacts(models.Model):
         verbose_name = "Contact"
         verbose_name_plural = "Contacts"
 
+        indexes = [
+            models.Index(fields=["city"]),
+            models.Index(fields=["name"]),
+            models.Index(fields=["phone"]),
+            models.Index(fields=["email"]),
+        ]
+
     def __str__(self):
         return self.name

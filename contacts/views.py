@@ -8,6 +8,7 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 
 def home(request):
@@ -22,7 +23,24 @@ def contacts(request):
 #    contacts = Contacts.objects.all()
    contacts_list = Contacts.objects.filter(user=request.user).order_by("id")
    
-   paginator = Paginator(contacts_list,4)
+   query = request.GET.get("q", "")
+   city_query = request.GET.get("city", "")
+
+   if city_query:
+        contacts_list = contacts_list.filter(
+            city__iexact = city_query
+        )
+   
+   if query:
+       contacts_list = contacts_list.filter(
+           Q(name__icontains=query) |
+           Q(email__icontains=query) |
+           Q(city__icontains=query) |
+           Q(phone__icontains=query)
+       )
+   
+   
+   paginator = Paginator(contacts_list,2)
    
    page_num = request.GET.get("page")
 
@@ -31,7 +49,11 @@ def contacts(request):
    return render( 
             request, 
             'contacts/contacts.html',
-            {"page_obj": page_obj}
+            {
+                "page_obj": page_obj,
+                "query": query, 
+                "city": city_query,
+            }
         )
 
 
@@ -58,18 +80,27 @@ def add_contact(request):
     if request.method == 'POST':
        form = ContactForm(request.POST) 
 
-
+       Contacts.objects.create(
+          user=request.user,
+          name = "arsh",
+          city = "khanna",
+          phone = "45632",
+          email = "arsh@arsh.com"
+        )
+    
        if form.is_valid():
-           
-          contact = form.save(commit=False)
-          contact.user = request.user
-          contact.save()
-          messages.success(request, "Contact saved successfully")
-          return redirect("/app/contacts/") 
+
+             contact = form.save(commit=False)
+             contact.user = request.user
+             contact.save()
+             messages.success(request, "Contact saved successfully")
+             return redirect("/app/contacts/") 
+
+       else:
+             messages.error(request, "Contact not Saved !!")
 
     else:
           form = ContactForm()
-          messages.error(request, "Contact not Saved !!")
           
     return render(
                   request, 
@@ -109,16 +140,11 @@ def edit_contact(request, pk):
 @require_POST
 @login_required
 def delete_contact(request, pk):
+   
+    contact = get_object_or_404(Contacts, pk=pk, user=request.user)
+    contact.delete()
+    messages.success(request, "Contact deleted Success !!!")
     
-    if User.objects.get(pk=pk):
-    
-        contact = get_object_or_404(Contacts, pk=pk, user=request.user)
-        contact.delete()
-        messages.success(request, "Contact deleted Success !!!")
-    
-    else:
-        messages.error(request, "Failed to delete !!")
-
     return redirect("/app/contacts/")
 
 
