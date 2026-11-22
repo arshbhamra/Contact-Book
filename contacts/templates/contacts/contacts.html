@@ -9,14 +9,19 @@
     <button type="submit">Search</button>
     <a href="{% url 'contacts' %}"> Clear</a>
 </form>
-
+<br>
 <span>My Contacts</span><br /><br>
+
 
 {% for contact in page_obj %}
 
 <form method="post" action="{% url 'delete_contact' contact.id %}">
     {% csrf_token %}
     <button type="submit">Delete </button>
+
+    <a href="{% url 'contact_detail' contact.pk %}">
+        {{ contact.name }}
+    </a>
 
     {{ page_obj.start_index|add:forloop.counter0 }}. &nbsp; {{ contact.id}}, {{ contact.name }}, {{ contact.phone }}, {{ contact.city }}, {{ contact.email }} <br />
 

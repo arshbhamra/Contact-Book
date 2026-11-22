@@ -1,0 +1,41 @@
+{% extends "contacts/base.html" %}
+
+{% block title %}
+    Recently Viewed Contacts
+{% endblock %}
+
+{% block content %}
+
+<h1>Recently Viewed Contacts</h1>
+
+{% if contacts %}
+
+    {% for contact in contacts %}
+
+        <div class="contact-card">
+
+            <h3>
+                <a href="{% url 'contact_detail' contact.pk %}">
+                    {{ contact.name }}
+                </a>
+            </h3>
+
+            <p>{{ contact.phone }}</p>
+            <p>{{ contact.email }}</p>
+            <p>{{ contact.city }}</p>
+
+        </div>
+
+    {% endfor %}
+
+{% else %}
+
+    <p>You haven't viewed any contacts yet.</p>
+
+{% endif %}
+
+<a href="{% url 'contacts' %}">
+    Back to Contacts
+</a>
+
+{% endblock %}

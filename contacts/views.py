@@ -1,3 +1,6 @@
+Day 21 — Django Sessions and Cookies
+
+
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from .models import Contacts 
@@ -16,6 +19,73 @@ def home(request):
 
 def about(request):
     return render(request, 'contacts/about.html')
+
+@login_required
+def contact_detail(request, pk):
+
+    contact = get_object_or_404(
+        Contacts,
+        pk=pk,
+        user=request.user
+    )
+
+    recent_ids = request.session.get(
+        "recent_contact_ids",
+        []
+    )
+
+    # Remove duplicate ID
+    if contact.pk in recent_ids:
+        recent_ids.remove(contact.pk)
+
+    # Add latest viewed contact first
+    recent_ids.insert(0, contact.pk)
+
+    # Keep only the latest five
+    recent_ids = recent_ids[:5]
+
+    # Save updated list in session
+    request.session["recent_contact_ids"] = recent_ids
+
+    return render(
+        request,
+        "contacts/contact_detail.html",
+        {"contact": contact}
+    )
+
+@login_required
+def recent_contacts(request):
+
+    recent_ids = request.session.get(
+        "recent_contact_ids",
+        []
+    )
+
+    # Fetch only the current user's contacts
+    contacts = Contacts.objects.filter(
+        user=request.user,
+        pk__in=recent_ids
+    )
+
+    # Preserve session order
+    contacts_by_id = {
+        contact.pk: contact
+        for contact in contacts
+    }
+
+    ordered_contacts = [
+        contacts_by_id[contact_id]
+        for contact_id in recent_ids
+        if contact_id in contacts_by_id
+    ]
+
+    return render(
+        request,
+        "contacts/recent_contacts.html",
+        {"contacts": ordered_contacts}
+    )
+
+
 
 @login_required
 def contacts(request):
@@ -40,7 +110,7 @@ def contacts(request):
        )
    
    
-   paginator = Paginator(contacts_list,2)
+   paginator = Paginator(contacts_list,7)
    
    page_num = request.GET.get("page")
 

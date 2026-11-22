@@ -1,0 +1,40 @@
+{% extends "contacts/base.html" %}
+
+{% block title %}
+    Contact Details
+{% endblock %}
+
+{% block content %}
+
+<h1>Contact Details</h1>
+
+<div class="contact-card">
+
+    <h2>{{ contact.name }}</h2>
+
+    <p>
+        <strong>Phone:</strong>
+        {{ contact.phone }}
+    </p>
+
+    <p>
+        <strong>Email:</strong>
+        {{ contact.email }}
+    </p>
+
+    <p>
+        <strong>City:</strong>
+        {{ contact.city }}
+    </p>
+
+</div>
+
+<a href="{% url 'contacts' %}">
+    Back to Contacts
+</a>
+
+<a href="{% url 'recent_contacts' %}">
+    Recently Viewed
+</a>
+
+{% endblock %}

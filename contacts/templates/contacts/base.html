@@ -23,7 +23,9 @@
             <a href="{% url 'contacts' %}"> Contacts</a>
             <a href="{% url 'about' %}">About</a>
             <a href="{% url 'add_contact' %}">Add Contact</a>
+            <a href="{% url 'recent_contacts' %}">Recent Contacts</a><br>
 
+<br>
         </nav>
         <form method="POST" action="{% url 'logout' %}">
             {% csrf_token %}
