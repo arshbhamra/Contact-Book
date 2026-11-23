@@ -156,7 +156,7 @@ Installation and Setup
 
 1. Clone the repository
 
-git clone https://github.com/arshbhamra/Contact-Book.git
+git clone <your-repository-url>
 cd personal-contact-book
 
 2. Create a virtual environment
@@ -243,37 +243,3 @@ Project: Personal Contact Book
 Category: Backend Web Development
 Framework: Django
 Status: Completed — Learning Milestone 1
-
-
-
-
-
-
-
-
-
-Syllabus.
-
-Phase 1 — Django Fundamentals (Days 1–12)
-
-- Python/Django fundamentals
-- MVT architecture
-- URLs, views and templates
-- DTL and static files
-- Models, migrations and ORM
-- CRUD, Forms and ModelForms
-
-Project: Personal Contact Book v1.
-
-
-Phase 2 — Authentication, Security and Testing (Days 13–22)
-
-- Authentication and authorization
-- Registration, login and logout
-- Database relationships
-- User ownership and IDOR prevention
-- Messages, pagination and search
-- Sessions and cookies
-- Django testing
-
-Project: Personal Contact Book v2.
